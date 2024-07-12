@@ -129,6 +129,7 @@ class CheckDict(TypedDict):
     filter_body: bool
     filter_http_body: bool
     filter_default_fail: bool
+    radix_id: NotRequired[str]
     badge_url: str
     last_duration: NotRequired[int]
     unique_key: NotRequired[str]
@@ -140,8 +141,6 @@ class CheckDict(TypedDict):
     timeout: NotRequired[int]
     schedule: NotRequired[str]
     tz: NotRequired[str]
-
-
 @dataclass
 class DowntimeRecord:
     boundary: datetime  # The start of this time interval (timezone-aware)
@@ -181,6 +180,39 @@ class DowntimeRecorder:
                 return
 
 
+class CheckDict(TypedDict, total=False):
+    name: str
+    slug: str
+    tags: str
+    desc: str
+    grace: int
+    n_pings: int
+    status: str
+    started: bool
+    last_ping: str | None
+    next_ping: str | None
+    manual_resume: bool
+    methods: str
+    subject: str
+    subject_fail: str
+    start_kw: str
+    success_kw: str
+    failure_kw: str
+    filter_subject: bool
+    filter_body: bool
+    last_duration: int
+    unique_key: str
+    ping_url: str
+    update_url: str
+    pause_url: str
+    resume_url: str
+    channels: str
+    timeout: int
+    schedule: str
+    tz: str
+    radix_id: int
+
+
 class Check(models.Model):
     name = models.CharField(max_length=100, blank=True)
     slug = models.CharField(max_length=100, blank=True)
@@ -213,6 +245,8 @@ class Check(models.Model):
     has_confirmation_link = models.BooleanField(default=False)
     alert_after = models.DateTimeField(null=True, blank=True, editable=False)
     status = models.CharField(max_length=6, choices=STATUSES, default="new")
+    radix_id = models.IntegerField(default=0)
+
 
     # Used to pass downtime data to report templates. Not persisted to db.
     past_downtimes: list[DowntimeRecord] | None = None
@@ -452,6 +486,7 @@ class Check(models.Model):
             "filter_body": self.filter_body,
             "filter_http_body": self.filter_http_body,
             "filter_default_fail": self.filter_default_fail,
+            "radix_id": self.radix_id,
             # Optimization: construct badge URLs manually instead of using reverse().
             # This is significantly quicker when returning hundreds of checks.
             "badge_url": f"{settings.SITE_ROOT}/b/2/{self.badge_key}.svg",

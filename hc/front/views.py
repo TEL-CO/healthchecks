@@ -531,7 +531,6 @@ def add_check(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
     project = _get_rw_project_for_user(request, code)
     if project.num_checks_available() <= 0:
         return HttpResponseBadRequest()
-
     form = forms.AddCheckForm(request.POST)
     if not form.is_valid():
         return HttpResponseBadRequest()
@@ -545,6 +544,7 @@ def add_check(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
     check.schedule = form.cleaned_data["schedule"]
     check.tz = form.cleaned_data["tz"]
     check.grace = form.cleaned_data["grace"]
+    check.radix_id = form.cleaned_data["radix_id"]
     check.save()
 
     check.assign_all_channels()
@@ -565,6 +565,7 @@ def update_name(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
         check.slug = form.cleaned_data["slug"]
         check.tags = form.cleaned_data["tags"]
         check.desc = form.cleaned_data["desc"]
+        check.radix_id = form.cleaned_data["radix_id"]
         check.save()
 
     if "/details/" in request.headers.get("Referer", ""):
