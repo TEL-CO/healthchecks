@@ -76,6 +76,7 @@ class NameTagsForm(forms.Form):
     slug = forms.SlugField(max_length=100, required=False)
     tags = forms.CharField(max_length=500, required=False)
     desc = forms.CharField(required=False)
+    radix_id = forms.IntegerField(required=False)
 
     def clean_tags(self) -> str:
         result = []
@@ -94,6 +95,7 @@ class AddCheckForm(NameTagsForm):
     schedule = forms.CharField(required=False, max_length=100)
     tz = forms.CharField(max_length=36, validators=[TimezoneValidator()])
     grace = forms.IntegerField(min_value=60, max_value=31536000)
+    radix_id = forms.IntegerField(required=False)
 
     def clean_timeout(self) -> td:
         return td(seconds=self.cleaned_data["timeout"])

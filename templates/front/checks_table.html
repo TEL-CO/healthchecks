@@ -56,6 +56,21 @@
             <span class="checks-subline">Last Duration</span>
             {% endif %}
         </th>
+        <th class="th-radix_id">
+            {% if sort == "radix_id" %}
+            <a href="{% sort_url '-radix_id' %}" data-toggle="tooltip" class="sort-radix_id" data-sort-value="-radix_id">
+                Radix ID<span class="ic-asc"></span>
+            </a>
+            {% elif sort == "-radix_id" %}
+            <a href="{% sort_url 'created' %}" data-toggle="tooltip" class="sort-radix_id" data-sort-value="created">
+                Radix ID<span class="ic-desc"></span>
+            </a>
+            {% else %}
+            <a href="{% sort_url 'radix_id' %}" data-toggle="tooltip" class="default sort-radix_id" data-sort-value="radix_id">
+                Radix ID
+            </a>
+            {% endif %}
+        </th>
         <th></th>
     </tr>
     {% for check in checks %}
@@ -119,6 +134,11 @@
         </td>
         <td class="hidden-xs">
             <div class="last-ping">{% include "front/last_ping_cell.html" with check=check %}</div>
+        </td>
+        <td class="radix_id">
+            <div data-radix-id="{{ check.radix_id }}" class="radix-id {% if not check.radix_id %}not-set{% endif %}">
+                <span class="radix_id">{{ check.radix_id }}</span>
+            </div>
         </td>
         <td class="actions">
             {% if rw %}

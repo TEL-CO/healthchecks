@@ -102,38 +102,6 @@ def isostring(dt: datetime | None) -> str | None:
     return dt.replace(microsecond=0).isoformat() if dt else None
 
 
-class CheckDict(TypedDict, total=False):
-    name: str
-    slug: str
-    tags: str
-    desc: str
-    grace: int
-    n_pings: int
-    status: str
-    started: bool
-    last_ping: str | None
-    next_ping: str | None
-    manual_resume: bool
-    methods: str
-    subject: str
-    subject_fail: str
-    start_kw: str
-    success_kw: str
-    failure_kw: str
-    filter_subject: bool
-    filter_body: bool
-    last_duration: int
-    unique_key: str
-    ping_url: str
-    update_url: str
-    pause_url: str
-    resume_url: str
-    channels: str
-    timeout: int
-    schedule: str
-    tz: str
-
-
 @dataclass
 class DowntimeRecord:
     boundary: datetime  # The start of this time interval (timezone-aware)
@@ -173,6 +141,39 @@ class DowntimeRecorder(object):
                 return
 
 
+class CheckDict(TypedDict, total=False):
+    name: str
+    slug: str
+    tags: str
+    desc: str
+    grace: int
+    n_pings: int
+    status: str
+    started: bool
+    last_ping: str | None
+    next_ping: str | None
+    manual_resume: bool
+    methods: str
+    subject: str
+    subject_fail: str
+    start_kw: str
+    success_kw: str
+    failure_kw: str
+    filter_subject: bool
+    filter_body: bool
+    last_duration: int
+    unique_key: str
+    ping_url: str
+    update_url: str
+    pause_url: str
+    resume_url: str
+    channels: str
+    timeout: int
+    schedule: str
+    tz: str
+    radix_id: int
+
+
 class Check(models.Model):
     name = models.CharField(max_length=100, blank=True)
     slug = models.CharField(max_length=100, blank=True)
@@ -203,6 +204,8 @@ class Check(models.Model):
     has_confirmation_link = models.BooleanField(default=False)
     alert_after = models.DateTimeField(null=True, blank=True, editable=False)
     status = models.CharField(max_length=6, choices=STATUSES, default="new")
+    radix_id = models.IntegerField(default=0)
+
 
     class Meta:
         indexes = [
@@ -403,6 +406,7 @@ class Check(models.Model):
             "failure_kw": self.failure_kw,
             "filter_subject": self.filter_subject,
             "filter_body": self.filter_body,
+            "radix_id": self.radix_id,
         }
 
         if self.last_duration:

@@ -41,6 +41,7 @@ class ChecksAdmin(ModelAdmin[Check]):
         "status",
         "last_start",
         "last_ping",
+        "radix_id",	
     )
     list_filter = ("status", "kind", "last_ping", "last_start")
 
