@@ -1056,6 +1056,7 @@ def copy(request: AuthenticatedHttpRequest, code: UUID) -> HttpResponse:
     copied.kind = check.kind
     copied.timeout, copied.grace = check.timeout, check.grace
     copied.schedule, copied.tz = check.schedule, check.tz
+    copied.radix_id = check.radix_id
     copied.save()
 
     copied.channel_set.add(*check.channel_set.all())
