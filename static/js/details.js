@@ -9,6 +9,13 @@ $(function () {
         return false;
     });
 
+    $("#edit-radix-id").click(function() {
+        $('#update-name-modal').modal("show");
+        $("#update-name-input").focus();
+
+        return false;
+    });
+
     // Configure Selectize for entering tags
     function toOption(tag) {
         return {value: tag}

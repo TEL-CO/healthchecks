@@ -84,6 +84,7 @@
                  data-slug="{{ check.slug }}"
                  data-tags="{{ check.tags }}"
                  data-desc="{{ check.desc }}"
+                 data-radix_id="{{ check.radix_id }}"
                  class="my-checks-name {% if not check.name %}unnamed{% endif %}">
                 <div>{{ check.name|default:"unnamed"|break_underscore }}</div>
                 {% for tag in check.tags_list %}

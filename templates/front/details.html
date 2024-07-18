@@ -47,6 +47,15 @@
 
     <div class="col-sm-5">
         {% if rw %}
+        <div class="radix_id-block">
+            <h2>Radix ID</h2>
+            {{ check.radix_id }}
+            <div class="text-right">
+                <button id="edit-radix-id" class="btn btn-sm btn-default">
+                    Edit Radix ID&hellip;
+                </button>
+            </div>
+        </div>
         <div class="details-block">
             <h2>Description</h2>
             {% if check.desc %}
